@@ -151,6 +151,12 @@ const [clientMenus, setClientMenus] = useState<{
   Nathan: [],
 });
 
+const handleLogout = () => {
+  setUserType(null); // Reset userType
+  setActiveScreen('login'); // Navigate back to login screen
+};
+
+
 
       // this updates screen to seleted screen
   const navigateToScreen = (screen: string) => {
@@ -184,8 +190,13 @@ const [clientMenus, setClientMenus] = useState<{
               <View style={styles.headerTextContainer}>
                 <Text style={styles.headerText}>Set Menu</Text>
               </View>
+
+              <TouchableOpacity onPress={handleLogout} style={styles.logoutButton}>
+  <Text style={styles.buttonText2}>Log out</Text>
+</TouchableOpacity>
             </View>
 
+            
             <View style={styles.formContainer}>
 <TextInput
   placeholder="Search for Dish"
@@ -286,19 +297,23 @@ const [clientMenus, setClientMenus] = useState<{
 {activeScreen === 'home' && (
   <HomeScreen
     dishlist={dishlist}
-    clientMenus={clientMenus} // Pass clientMenus here
-    userType={userType} // Pass userType here
+    clientMenus={clientMenus}
+    userType={userType}
+    handleLogout={handleLogout} // Pass the logout function
   />
 )}
+
 
 
 {activeScreen === 'menu' && (
   <MenuScreen
     dishlist={dishlist}
-    setClientMenus={setClientMenus} // Pass this function
-    clientMenus={clientMenus} // Optional: Pass if you want to read data in MenuScreen
+    setClientMenus={setClientMenus}
+    clientMenus={clientMenus}
+    handleLogout={handleLogout} // Pass the logout function
   />
 )}
+
 
 
 {activeScreen === 'login' && (
@@ -358,9 +373,11 @@ const courseList = [
 
 const HomeScreen: React.FC<{
   dishlist: NewDish[];
-  clientMenus: { [clientName: string]: NewDish[] }; // Type for clientMenus
-  userType: string | null; // Type for userType
-}> = ({ dishlist, clientMenus, userType }) => {
+  clientMenus: { [clientName: string]: NewDish[] };
+  userType: string | null;
+  handleLogout: () => void; // Add handleLogout type
+}> = ({ dishlist, clientMenus, userType, handleLogout }) => {
+
 
   
   const [totalCourses, setTotalCourses] = useState<string>(`${dishlist.length}`);
@@ -421,6 +438,10 @@ const HomeScreen: React.FC<{
           <View style={styles.headerTextContainer}>
             <Text style={styles.headerText}>Home</Text>
           </View>
+
+          <TouchableOpacity onPress={handleLogout} style={styles.logoutButton2}>
+  <Text style={styles.buttonText2}>Log out</Text>
+</TouchableOpacity>
         </View>
 
         <View style={styles.formContainer}>
@@ -500,7 +521,11 @@ const HomeScreen: React.FC<{
           );
         };
         
-        const MenuScreen: React.FC<MenuScreenProps> = ({ dishlist, setClientMenus }) => {
+        const MenuScreen: React.FC<MenuScreenProps & { handleLogout: () => void }> = ({
+  dishlist,
+  setClientMenus,
+  handleLogout,
+}) => {
           const [selectedCourse, setSelectedCourse] = useState<string>('');
           const [selectedDishes, setSelectedDishes] = useState<Set<string>>(new Set());
           const [clientName, setClientName] = useState<string>('Jaden');
@@ -543,6 +568,10 @@ const HomeScreen: React.FC<{
                 <View style={styles.headerTextContainer}>
                   <Text style={styles.headerText}>Menu</Text>
                 </View>
+                <TouchableOpacity onPress={handleLogout} style={styles.logoutButton3}>
+  <Text style={styles.buttonText2}>Log out</Text>
+</TouchableOpacity>
+
               </View>
         
               {/* Course Picker */}
@@ -776,6 +805,13 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
   },
+  buttonText2: {
+    color: '#fff',
+    fontSize: 10,
+    fontWeight: 'bold',
+    justifyContent: 'center',
+    paddingTop: 4
+  },
   bottomNav: {
     flexDirection: 'row',
     justifyContent: 'space-around',
@@ -994,6 +1030,34 @@ const styles = StyleSheet.create({
   checked: {
     backgroundColor: '#4caf50',
   },
+  logoutButton: {
+  backgroundColor: '#404040',
+  padding: 10,
+  borderRadius: 20,
+  width: 70,
+  height: 40,
+  alignItems: 'center',
+  margin: 5,
+},
+logoutButton2: {
+  backgroundColor: '#404040',
+  padding: 10,
+  borderRadius: 20,
+  width: 70,
+  height: 40,
+  alignItems: 'center',
+  marginHorizontal: 5,
+},
+logoutButton3: {
+  backgroundColor: '#404040',
+  padding: 10,
+  borderRadius: 20,
+  width: 70,
+  height: 40,
+  alignItems: 'center',
+  marginHorizontal: 5,
+},
+
   
 });
 const menuScreenStyles = StyleSheet.create({
