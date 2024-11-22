@@ -151,12 +151,6 @@ const [clientMenus, setClientMenus] = useState<{
   Nathan: [],
 });
 
-const handleLogout = () => {
-  setUserType(null); // Reset userType
-  setActiveScreen('login'); // Navigate back to login screen
-};
-
-
 
       // this updates screen to seleted screen
   const navigateToScreen = (screen: string) => {
@@ -190,13 +184,8 @@ const handleLogout = () => {
               <View style={styles.headerTextContainer}>
                 <Text style={styles.headerText}>Set Menu</Text>
               </View>
-
-              <TouchableOpacity onPress={handleLogout} style={styles.logoutButton}>
-  <Text style={styles.buttonText2}>Log out</Text>
-</TouchableOpacity>
             </View>
 
-            
             <View style={styles.formContainer}>
 <TextInput
   placeholder="Search for Dish"
@@ -297,23 +286,19 @@ const handleLogout = () => {
 {activeScreen === 'home' && (
   <HomeScreen
     dishlist={dishlist}
-    clientMenus={clientMenus}
-    userType={userType}
-    handleLogout={handleLogout} // Pass the logout function
+    clientMenus={clientMenus} // Pass clientMenus here
+    userType={userType} // Pass userType here
   />
 )}
-
 
 
 {activeScreen === 'menu' && (
   <MenuScreen
     dishlist={dishlist}
-    setClientMenus={setClientMenus}
-    clientMenus={clientMenus}
-    handleLogout={handleLogout} // Pass the logout function
+    setClientMenus={setClientMenus} // Pass this function
+    clientMenus={clientMenus} // Optional: Pass if you want to read data in MenuScreen
   />
 )}
-
 
 
 {activeScreen === 'login' && (
@@ -373,11 +358,9 @@ const courseList = [
 
 const HomeScreen: React.FC<{
   dishlist: NewDish[];
-  clientMenus: { [clientName: string]: NewDish[] };
-  userType: string | null;
-  handleLogout: () => void; // Add handleLogout type
-}> = ({ dishlist, clientMenus, userType, handleLogout }) => {
-
+  clientMenus: { [clientName: string]: NewDish[] }; // Type for clientMenus
+  userType: string | null; // Type for userType
+}> = ({ dishlist, clientMenus, userType }) => {
 
   
   const [totalCourses, setTotalCourses] = useState<string>(`${dishlist.length}`);
@@ -436,25 +419,14 @@ const HomeScreen: React.FC<{
           </View>
 
           <View style={styles.headerTextContainer}>
-            <Text style={styles.headerText2}>
-              {isChef ? 'Home' : `${userType}'s Menu`}
-            </Text>
+            <Text style={styles.headerText}>Home</Text>
           </View>
-
-          <TouchableOpacity onPress={handleLogout} style={styles.logoutButton2}>
-  <Text style={styles.buttonText2}>Log out</Text>
-</TouchableOpacity>
         </View>
 
         <View style={styles.formContainer}>
           <Text style={styles.input}>Total Courses: {totalCourses}</Text>
         </View>
 
-        {!isChef && userType && (
-          <View style={styles.titleContainer}>
-            <Text style={styles.titleText}>Prepared Menu for {userType}</Text>
-          </View>
-        )}
         <View style={styles.menuItemsContainer}>
           <FlatList
             data={menuItems}
@@ -528,11 +500,7 @@ const HomeScreen: React.FC<{
           );
         };
         
-        const MenuScreen: React.FC<MenuScreenProps & { handleLogout: () => void }> = ({
-  dishlist,
-  setClientMenus,
-  handleLogout,
-}) => {
+        const MenuScreen: React.FC<MenuScreenProps> = ({ dishlist, setClientMenus }) => {
           const [selectedCourse, setSelectedCourse] = useState<string>('');
           const [selectedDishes, setSelectedDishes] = useState<Set<string>>(new Set());
           const [clientName, setClientName] = useState<string>('Jaden');
@@ -575,10 +543,6 @@ const HomeScreen: React.FC<{
                 <View style={styles.headerTextContainer}>
                   <Text style={styles.headerText}>Menu</Text>
                 </View>
-                <TouchableOpacity onPress={handleLogout} style={styles.logoutButton3}>
-  <Text style={styles.buttonText2}>Log out</Text>
-</TouchableOpacity>
-
               </View>
         
               {/* Course Picker */}
@@ -679,13 +643,6 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 24,
     fontWeight: 'bold',
-    paddingTop: 6,
-    textAlign: 'center',
-  },
-  headerText2: {
-    color: '#fff',
-    fontSize: 22,
-    fontWeight: '700',
     paddingTop: 6,
     textAlign: 'center',
   },
@@ -818,13 +775,6 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 16,
     fontWeight: 'bold',
-  },
-  buttonText2: {
-    color: '#fff',
-    fontSize: 10,
-    fontWeight: 'bold',
-    justifyContent: 'center',
-    paddingTop: 4
   },
   bottomNav: {
     flexDirection: 'row',
@@ -1044,51 +994,6 @@ const styles = StyleSheet.create({
   checked: {
     backgroundColor: '#4caf50',
   },
-  logoutButton: {
-  backgroundColor: '#404040',
-  padding: 10,
-  borderRadius: 20,
-  width: 70,
-  height: 40,
-  alignItems: 'center',
-  margin: 5,
-},
-logoutButton2: {
-  backgroundColor: '#404040',
-  padding: 10,
-  borderRadius: 20,
-  width: 70,
-  height: 40,
-  alignItems: 'center',
-  marginHorizontal: 5,
-},
-logoutButton3: {
-  backgroundColor: '#404040',
-  padding: 10,
-  borderRadius: 20,
-  width: 70,
-  height: 40,
-  alignItems: 'center',
-  marginHorizontal: 5,
-},
-titleContainer: {
-  padding: 15,
-  backgroundColor: '#404040',  // Adjust based on your theme
-  marginTop: 10,
-  borderRadius: 10,
-  marginBottom: 20,  // Add some space below the title
-  marginHorizontal: 70
-},
-
-titleText: {
-  fontSize: 18,
-  fontWeight: 'bold',
-  color: '#fff',  // White text color for contrast
-  textAlign: 'center',
-  textDecorationLine: 'underline'
-},
-
-
   
 });
 const menuScreenStyles = StyleSheet.create({
