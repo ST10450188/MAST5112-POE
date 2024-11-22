@@ -436,7 +436,9 @@ const HomeScreen: React.FC<{
           </View>
 
           <View style={styles.headerTextContainer}>
-            <Text style={styles.headerText}>Home</Text>
+            <Text style={styles.headerText2}>
+              {isChef ? 'Home' : `${userType}'s Menu`}
+            </Text>
           </View>
 
           <TouchableOpacity onPress={handleLogout} style={styles.logoutButton2}>
@@ -448,6 +450,11 @@ const HomeScreen: React.FC<{
           <Text style={styles.input}>Total Courses: {totalCourses}</Text>
         </View>
 
+        {!isChef && userType && (
+          <View style={styles.titleContainer}>
+            <Text style={styles.titleText}>Prepared Menu for {userType}</Text>
+          </View>
+        )}
         <View style={styles.menuItemsContainer}>
           <FlatList
             data={menuItems}
@@ -672,6 +679,13 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 24,
     fontWeight: 'bold',
+    paddingTop: 6,
+    textAlign: 'center',
+  },
+  headerText2: {
+    color: '#fff',
+    fontSize: 22,
+    fontWeight: '700',
     paddingTop: 6,
     textAlign: 'center',
   },
@@ -1057,6 +1071,23 @@ logoutButton3: {
   alignItems: 'center',
   marginHorizontal: 5,
 },
+titleContainer: {
+  padding: 15,
+  backgroundColor: '#404040',  // Adjust based on your theme
+  marginTop: 10,
+  borderRadius: 10,
+  marginBottom: 20,  // Add some space below the title
+  marginHorizontal: 70
+},
+
+titleText: {
+  fontSize: 18,
+  fontWeight: 'bold',
+  color: '#fff',  // White text color for contrast
+  textAlign: 'center',
+  textDecorationLine: 'underline'
+},
+
 
   
 });
