@@ -32,7 +32,7 @@ interface LoginScreenProps {
   handleUserSelection: (userType: string) => void;
 }
 
-const LoginScreen: React.FC<{ handleUserSelection: (userType: string) => void }> = ({ handleUserSelection }) => {
+const LoginScreen = ({ handleUserSelection }: { handleUserSelection: (userType: string) => void }) => {
   return (
     <View style={styles.loginContainer}>
       <Image source={require('./assets/appLogo.png')} style={styles.logoImage2} />
@@ -70,8 +70,8 @@ export default function App() {
   const [activeScreen, setActiveScreen] = useState<string>('login');
 const [userType, setUserType] = useState<string | null>(null); 
 
-const [searchTerm, setSearchTerm] = useState<string>(''); // For the search input
-const [searchResults, setSearchResults] = useState<NewDish[]>([]); // Search results
+const [searchTerm, setSearchTerm] = useState<string>(''); 
+const [searchResults, setSearchResults] = useState<NewDish[]>([]); 
 
 const handleSearch = () => {
   const results = dishlist.filter((dish) =>
@@ -85,8 +85,8 @@ const handleSelectDish = (dish: NewDish) => {
   setDescription(dish.description);
   setPrice(dish.price.toString());
   setCourse(dish.course);
-  setSearchTerm(''); // Clear search field
-  setSearchResults([]); // Clear search results
+  setSearchTerm(''); 
+  setSearchResults([]); 
 };
 
 const handleDelete = () => {
@@ -94,7 +94,7 @@ const handleDelete = () => {
   setDishList(updatedDishList);
 
   alert('Dish deleted successfully!');
-  handleAdd(); // Clear fields after deleting
+  handleAdd(); 
 };
 
 const handleAdd = () => {
@@ -130,12 +130,11 @@ const handleSaveDish = () => {
   const existingDishIndex = dishlist.findIndex((dish) => dish.name === name);
 
   if (existingDishIndex !== -1) {
-    // Update existing dish
+    // to update existing dish
     const updatedDishList = [...dishlist];
     updatedDishList[existingDishIndex] = newDish;
     setDishList(updatedDishList);
   } else {
-    // Add new dish
     setDishList([...dishlist, newDish]);
   }
 
@@ -152,8 +151,8 @@ const [clientMenus, setClientMenus] = useState<{
 });
 
 const handleLogout = () => {
-  setUserType(null); // Reset userType
-  setActiveScreen('login'); // Navigate back to login screen
+  setUserType(null); // resets the userType
+  setActiveScreen('login'); // navigates back to login screen
 };
 
 
@@ -161,7 +160,7 @@ const handleLogout = () => {
       // this updates screen to seleted screen
   const navigateToScreen = (screen: string) => {
     if (screen === 'salad') {
-      setActiveScreen('menu'); // Navigate to the MenuScreen when "salad" is clicked
+      setActiveScreen('menu'); 
     } else {
     setActiveScreen(screen);
     }
@@ -299,7 +298,7 @@ const handleLogout = () => {
     dishlist={dishlist}
     clientMenus={clientMenus}
     userType={userType}
-    handleLogout={handleLogout} // Pass the logout function
+    handleLogout={handleLogout} 
   />
 )}
 
@@ -310,7 +309,7 @@ const handleLogout = () => {
     dishlist={dishlist}
     setClientMenus={setClientMenus}
     clientMenus={clientMenus}
-    handleLogout={handleLogout} // Pass the logout function
+    handleLogout={handleLogout} 
   />
 )}
 
@@ -325,7 +324,7 @@ const handleLogout = () => {
   />
 )}
 
-        {/* Navigation */}
+
         <View style={styles.bottomNav}>
           <TouchableOpacity style={styles.navButton} onPress={() => navigateToScreen('create')}>
           <Image
@@ -371,14 +370,12 @@ const courseList = [
   { id: 12, name: "Mignardise", courseNum: [7, 8, 9, 10, 12] },
 ];
 
-const HomeScreen: React.FC<{
+const HomeScreen = ({ dishlist, clientMenus, userType, handleLogout }: {
   dishlist: NewDish[];
   clientMenus: { [clientName: string]: NewDish[] };
   userType: string | null;
-  handleLogout: () => void; // Add handleLogout type
-}> = ({ dishlist, clientMenus, userType, handleLogout }) => {
-
-
+  handleLogout: () => void;
+}) => {
   
   const [totalCourses, setTotalCourses] = useState<string>(`${dishlist.length}`);
   const isChef = userType === 'Chef';
@@ -469,7 +466,7 @@ const HomeScreen: React.FC<{
           />
         </View>
 
-            {/* picker for course type */}
+          
         <View style={styles.pickerWrapper2}>
           <Picker
             onValueChange={handleCourseTypeChange}
@@ -517,9 +514,9 @@ const HomeScreen: React.FC<{
   setClientMenus: React.Dispatch<
     React.SetStateAction<{ [clientName: string]: NewDish[] }>
   >;
-  clientMenus?: { [clientName: string]: NewDish[] }; // Optional, if you need it
+  clientMenus?: { [clientName: string]: NewDish[] }; 
 }
-
+//actual checkbox wasn't working
         const CustomCheckBox: React.FC<{ checked: boolean; onToggle: () => void }> = ({ checked, onToggle }) => {
           return (
             <TouchableOpacity onPress={onToggle} style={styles.checkboxContainer}>
@@ -528,11 +525,9 @@ const HomeScreen: React.FC<{
           );
         };
         
-        const MenuScreen: React.FC<MenuScreenProps & { handleLogout: () => void }> = ({
-  dishlist,
-  setClientMenus,
-  handleLogout,
-}) => {
+        const MenuScreen = ({ dishlist, setClientMenus, handleLogout }: 
+          MenuScreenProps & { handleLogout: () => void }) => {
+        
           const [selectedCourse, setSelectedCourse] = useState<string>('');
           const [selectedDishes, setSelectedDishes] = useState<Set<string>>(new Set());
           const [clientName, setClientName] = useState<string>('Jaden');
@@ -581,7 +576,7 @@ const HomeScreen: React.FC<{
 
               </View>
         
-              {/* Course Picker */}
+             
               <View style={styles.pickerWrapper2}>
                 <Picker
                   selectedValue={selectedCourse}
@@ -595,7 +590,7 @@ const HomeScreen: React.FC<{
                 </Picker>
               </View>
         
-              {/* FlatList of Dishes */}
+              
               <FlatList
                 data={filteredDishes}
                 renderItem={({ item }) => (
@@ -611,7 +606,7 @@ const HomeScreen: React.FC<{
                 style={styles.flatList}
               />
         
-              {/* Client Picker */}
+              
               <View style={styles.pickerWrapper2}>
               <Picker
   selectedValue={clientName}
@@ -625,7 +620,7 @@ const HomeScreen: React.FC<{
 
               </View>
         
-              {/* Save Button */}
+              
               <TouchableOpacity onPress={handleSaveMenu} style={styles.saveButton2}>
                 <Text style={styles.buttonText}>Save</Text>
               </TouchableOpacity>
@@ -912,7 +907,7 @@ const styles = StyleSheet.create({
     flex: 1,  
   },
   flatList: {
-    flexGrow: 1,          // this allows the flatList to move in container
+    flexGrow: 1,          
   },
   logoImage: {
     width: 85,
@@ -1024,7 +1019,7 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
     color: '#fff',
-    marginBottom: 10, // Space between title and picker
+    marginBottom: 10, 
   },
   checkboxContainer: {
     width: 24,
@@ -1073,31 +1068,31 @@ logoutButton3: {
 },
 titleContainer: {
   padding: 15,
-  backgroundColor: '#404040',  // Adjust based on your theme
+  backgroundColor: '#404040',  
   marginTop: 10,
   borderRadius: 10,
-  marginBottom: 20,  // Add some space below the title
+  marginBottom: 20,  
   marginHorizontal: 70
 },
 
 titleText: {
   fontSize: 18,
   fontWeight: 'bold',
-  color: '#fff',  // White text color for contrast
+  color: '#fff',  
   textAlign: 'center',
   textDecorationLine: 'underline'
 },
 
 
-  
+  // Separate style sheet for menu screen
 });
 const menuScreenStyles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
     backgroundColor: '#1C2B09',
-    justifyContent: 'flex-start', // Ensures content starts at the top of the screen
-    marginBottom: 100, // Prevents content from being hidden behind the bottom navigation
+    justifyContent: 'flex-start', 
+    marginBottom: 100, 
   },
   picker: {
     backgroundColor: '#404040',
@@ -1127,7 +1122,7 @@ const menuScreenStyles = StyleSheet.create({
     alignItems: 'center',
     height: 60,
     justifyContent: 'center',
-    marginTop: 20, // Adds space between menu items and save button
+    marginTop: 20, 
   },
   buttonText: {
     color: '#fff',
@@ -1135,24 +1130,24 @@ const menuScreenStyles = StyleSheet.create({
     fontWeight: 'bold',
   },
   flatList: {
-    flexGrow: 1, // Allow FlatList to scroll properly
-    marginBottom: 10, // Add spacing below search results
+    flexGrow: 1, 
+    marginBottom: 10, 
   },
   headerContainer: {
-    marginBottom: 20, // Space between the title and content
+    marginBottom: 20, 
     alignItems: 'center',
   },
   title: {
     fontSize: 24,
     fontWeight: 'bold',
     color: '#fff',
-    marginBottom: 10, // Space between title and picker
+    marginBottom: 10, 
   },
   logoImage: {
     width: 85,
     height: 85,
     resizeMode: 'center',
-    marginBottom: 10, // Space between logo and title
+    marginBottom: 10, 
   },
 });
 
